@@ -1,0 +1,146 @@
+---
+import MusicsTable from "@/components/MusicsTable";
+import Layout from "../../layouts/Layout.astro";
+import { allPlaylists, songs } from "@/lib/data";
+import { CardPlayButton } from "@/components/CardPlayButton";
+
+const { id } = Astro.params;
+const playlistId =
+  id === null ? 0 : typeof id === "string" ? parseInt(id, 10) : id;
+
+const playlist = allPlaylists.find((playlist) => playlist.id === id);
+const playListSongs = songs.filter(
+  (song) => song.albumId === playlist?.albumId
+);
+
+function convertDurationToSeconds(duration: string) {
+  const [minutes, seconds] = duration.split(":").map(Number);
+  return minutes * 60 + seconds;
+}
+
+const durationsInSeconds = playListSongs.map((track) =>
+  convertDurationToSeconds(track.duration)
+);
+
+const totalSeconds = durationsInSeconds.reduce(
+  (total, duration) => total + duration,
+  0
+);
+
+// Calcular horas, minutos y segundos
+const hours = Math.floor(totalSeconds / 3600);
+const minutes = Math.floor((totalSeconds % 3600) / 60);
+const seconds = totalSeconds % 60;
+
+let totalDuration;
+if (hours < 1) {
+  if (seconds == 0) {
+    totalDuration = `${minutes} min`;
+  } else {
+    totalDuration = `${minutes} min ${seconds < 10 ? "0" : ""}${seconds} s`;
+  }
+} else if (hours > 24) {
+  totalDuration = "más de 24 h";
+} else {
+  if (minutes == 0) {
+    totalDuration = `${hours} h`;
+  } else {
+    totalDuration = `${hours} h ${minutes < 10 ? "0" : ""}${minutes} min aproximadamente`;
+  }
+}
+
+const bgColor = playlist?.color?.accent || "#121212";
+---
+
+<Layout title="Spotify Clone">
+  <div
+    id="playlist-container"
+    class="relative overflow-x-hidden min-h-full"
+    transition:name=`playlist ${id} box`
+  >
+    <div class="flex flex-col overflow-x-hidden z-10">
+      <!-- <PageHeader /> -->
+
+      <header
+        class="flex flex-row gap-8 px-6 pt-20 pb-6 items-end relative"
+        style=`background: ${bgColor}`
+      >
+        <picture class="aspect-square size-44 flex relative z-20">
+          <img
+            src={playlist?.cover}
+            alt={`Cover of ${playlist?.title}`}
+            class="object-cover size-44 max-w-44 rounded-lg shadow-custom"
+            transition:name=`playlist ${playlist?.id} image`
+          />
+        </picture>
+
+        <div class="flex flex-col justify-between h-4/5 relative z-20">
+          <h2 class="flex flex-1 items-end pb-3 text-sm">Lista</h2>
+          <div class="pb-2">
+            <h1 class="text-6xl font-extrabold block text-white">
+              {playlist?.title}
+              <span transition:name=`playlist ${playlist?.id} title`></span>
+            </h1>
+          </div>
+
+          <div class="flex-1 flex items-end">
+            <div class="text-sm text-gray-300 font-normal">
+              <div transition:name=`playlist ${playlist?.id} artists`>
+                <span class="white text-sm">
+                  {
+                    playlist?.creator && (
+                      <>
+                        {playlist?.creator}
+                        <span class="text-xs mx-1">•</span>
+                      </>
+                    )
+                  }
+                  <span class="text-white"
+                    >{playListSongs.length} canciones,
+                  </span>
+                  <span class="opacity-75 text-gray-300">{totalDuration}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="absolute z-10 opacity-30 inset-0 bg-gradient-to-b from-[#ffffff56] via-[#ffffff56]/20"
+        >
+        </div>
+        <div
+          class="absolute z-10 opacity-40 inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/50"
+        >
+        </div>
+      </header>
+
+      <div class="flex flex-col relative">
+        <div class="pl-6 pt-6">
+          <CardPlayButton id={id} client:load size="large" />
+        </div>
+
+        <section class="p-6">
+          <MusicsTable
+            songs={playListSongs}
+            playlistId={playlistId}
+            client:load
+          />
+        </section>
+        <div
+          class="absolute -z-20 inset-0"
+          style={`background-image: linear-gradient(to bottom, ${bgColor}, ${bgColor}80);`}
+        >
+        </div>
+        <div
+          class="absolute -z-10 inset-0"
+          style={`background-image: linear-gradient(to bottom, ${bgColor}40, ${bgColor}20);`}
+        >
+        </div>
+      </div>
+    </div>
+    <div
+      class="absolute -z-10 inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/50"
+    >
+    </div>
+  </div>
+</Layout>

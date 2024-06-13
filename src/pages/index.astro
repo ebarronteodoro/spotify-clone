@@ -1,0 +1,30 @@
+---
+import Greeting from "@/components/Greeting.svelte";
+import Layout from "../layouts/Layout.astro";
+import PlayListItemCard from "@/components/PlayListItemCard";
+import { playlists } from "@/lib/data";
+---
+
+<Layout title="Spotify Clone">
+  <div
+    id="playlist-container"
+    class="relative transition-all duration-1000 bg-green-600 min-h-full"
+  >
+    <!-- <PageHeader /> -->
+    <div class="relative z-10 px-6 pt-16 pb-6">
+      <Greeting />
+      <div class="flex flex-wrap mt-6 gap-4">
+        {
+          playlists.map((playlist) => (
+            <PlayListItemCard client:load playlist={playlist} />
+          ))
+        }
+      </div>
+    </div>
+
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/80"
+    >
+    </div>
+  </div>
+</Layout>

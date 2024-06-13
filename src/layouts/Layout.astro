@@ -1,0 +1,128 @@
+---
+import { Player } from "@/components/Player";
+import AsideMenu from "../components/AsideMenu.astro";
+import ViewTransitions from "astro/components/ViewTransitions.astro";
+import PageHeader from "@/components/PageHeader";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/Spotify-icon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <ViewTransitions fallback="none" />
+  </head>
+  <body>
+    <div id="app" class="relative h-screen p-2 gap-2">
+      <aside class="[grid-area:aside] flex flex-col overflow-y-hidden">
+        <AsideMenu transition:persist transition:name="aside-menu" />
+      </aside>
+
+      <!-- Encabezado simulado dentro del main -->
+      <PageHeader
+        client:load
+        transition:name="page-header"
+        transition:persist
+        className="absolute top-6 left-[23rem] px-5 right-6 min-w-max z-20"
+      />
+      <main
+        class="[grid-area:main] relative rounded-lg bg-zinc-900 overflow-y-auto"
+      >
+        <slot />
+      </main>
+
+      <footer
+        class="[grid-area:player] h-[80px] flex items-center relative z-50"
+      >
+        <Player client:load transition:name="media-player" transition:persist />
+      </footer>
+    </div>
+    <style>
+      #app {
+        display: grid;
+        grid-template-areas:
+          "aside main main"
+          "player player player";
+        grid-template-columns: 350px 1fr;
+        grid-template-rows: 1fr auto;
+      }
+
+      /* Estilos para el encabezado simulado */
+    </style>
+    <style is:global>
+      html {
+        font-family: "CircularStd", system-ui, sans-serif;
+        background: #000;
+        color: white;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px; /* Ancho del scrollbar */
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: #888; /* Color del scrollbar */
+        border-radius: 4px; /* Bordes redondeados */
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: transparent; /* Color del track */
+      }
+
+      body {
+        scrollbar-width: thin; /* Ancho del scrollbar */
+        scrollbar-color: #888 transparent;
+      }
+
+      @font-face {
+        font-family: "CircularStd";
+        src: url("/fonts/CircularStd-Medium.woff2") format("woff2");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "CircularStd";
+        src: url("/fonts/CircularStd-Book.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "CircularStd";
+        src: url("/fonts/CircularStd-Light.woff2") format("woff2");
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "CircularStd";
+        src: url("/fonts/CircularStd-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "CircularStd";
+        src: url("/fonts/CircularStd-Black.woff2") format("woff2");
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
+    </style>
+  </body>
+</html>
