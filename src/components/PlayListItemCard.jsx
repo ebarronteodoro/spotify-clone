@@ -20,12 +20,14 @@ const PlaylistCard = (playlist) => {
       <a
         href={`/playlist/${id}`}
         className="playlist-item transition-all duration-300 flex relative p-2 h-full overflow-hidden gap-2 pb-2 w-40 flex-col"
+        transition:name={`playlist ${id} box`}
       >
         <picture className="aspect-square w-full h-auto flex">
           <img
             src={cover}
             alt={`Cover of ${title} by ${artistsString}`}
             className="object-cover rounded-md size-36"
+            transition:name={`playlist ${id} image`}
           />
         </picture>
         <div className="flex flex-auto flex-col px-2">
