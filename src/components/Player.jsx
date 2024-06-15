@@ -91,9 +91,9 @@ export const Volume = () => (
 
 const CurrentSong = ({ image, title, artists }) => {
   return (
-    <div className="flex items-center gap-3 relative overflow-hidden">
-      <picture className="w-16 h-16 bg-zinc-800 rounded-md shadow-lg overflow-hidden">
-        <img src={image} alt={title} />
+    <div className="flex items-center gap-3 relative overflow-hidden max-w-[400px]">
+      <picture className="size-16 min-w-16 bg-zinc-800 rounded-md shadow-lg overflow-hidden">
+        <img className="" src={image} alt={title} />
       </picture>
 
       <div className="flex flex-col">

@@ -11,7 +11,9 @@ export const colors = {
   emerald: { accent: "#0c6e54", dark: "#064e3b" },
   rose: { accent: "#ed2377", dark: "#871b48" },
   gray: { accent: "#555555", dark: "#27272a" },
-  dark_rose: { accent: "#a84058", dark: "#a84058"},
-  old_lavender: { accent: "#705860", dark: "#705860"},
-  wine: { accent: "#481818", dark: "#481818"}
+  dark_rose: { accent: "#a84058", dark: "#a84058" },
+  old_lavender: { accent: "#705860", dark: "#705860" },
+  wine: { accent: "#481818", dark: "#481818" },
+  night_blue: { accent: "#282848", dark: "#282848" },
+  cirno: { accent: "#20b8e0", dark: "#20b8e0" },
 };
